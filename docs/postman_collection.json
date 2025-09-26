@@ -1,0 +1,561 @@
+{
+  "info": {
+    "name": "Sistema de Becas API",
+    "description": "Colección completa de endpoints para el sistema de gestión de becas universitarias",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "item": [
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data.accessToken) {",
+                  "        pm.collectionVariables.set('admin_token', response.data.accessToken);",
+                  "        console.log('Token guardado automáticamente');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@becas.com\",\n  \"password\": \"Admin123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Autenticar admin y obtener token JWT. El token se guarda automáticamente en las variables de colección."
+          }
+        }
+      ],
+      "description": "Endpoints de autenticación"
+    },
+    {
+      "name": "🎓 Scholarships (Public)",
+      "item": [
+        {
+          "name": "List Public Scholarships",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/scholarships?page=1&limit=10&level=pregrado&modality=presencial&search=excelencia",
+              "host": ["{{base_url}}"],
+              "path": ["api", "scholarships"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Página (1-1000)",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Límite por página (1-50)",
+                  "disabled": true
+                },
+                {
+                  "key": "level",
+                  "value": "pregrado",
+                  "description": "Nivel académico",
+                  "disabled": true
+                },
+                {
+                  "key": "modality",
+                  "value": "presencial",
+                  "description": "Modalidad de estudio",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "excelencia",
+                  "description": "Búsqueda por texto",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Listar becas públicas con filtros y paginación. Habilita los query parameters que necesites."
+          }
+        },
+        {
+          "name": "Scholarship Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/scholarships/beca-excelencia-academica",
+              "host": ["{{base_url}}"],
+              "path": ["api", "scholarships", "beca-excelencia-academica"]
+            },
+            "description": "Obtener detalle de beca por slug o ID. Cambiar 'beca-excelencia-academica' por el slug o ID de la beca."
+          }
+        }
+      ],
+      "description": "Endpoints públicos de becas"
+    },
+    {
+      "name": "📝 Applications",
+      "item": [
+        {
+          "name": "Create Application",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-utm-source",
+                "value": "website"
+              },
+              {
+                "key": "x-utm-campaign",
+                "value": "becas2024"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"scholarshipId\": \"64f8a1234567890abcdef123\",\n  \"docType\": \"cedula\",\n  \"docNumber\": \"12345678\",\n  \"firstName\": \"Juan Carlos\",\n  \"lastName\": \"Pérez González\",\n  \"nationality\": \"Colombiano\",\n  \"gender\": \"masculino\",\n  \"birthDate\": \"1995-05-15\",\n  \"maritalStatus\": \"soltero\",\n  \"birthCity\": \"Bogotá\",\n  \"residenceCity\": \"Medellín\",\n  \"email\": \"juan.perez@email.com\",\n  \"phone\": \"+57 300 123 4567\",\n  \"hasDisability\": false,\n  \"isIndigenous\": false,\n  \"university\": \"Universidad Nacional de Colombia\",\n  \"universityType\": \"publica\",\n  \"major\": \"Ingeniería de Sistemas\",\n  \"academicStatus\": \"estudiante\",\n  \"level\": \"pregrado\",\n  \"campusCity\": \"Medellín\",\n  \"gpa\": 4.2,\n  \"credits\": 120,\n  \"entryYear\": 2020,\n  \"graduationYear\": 2024,\n  \"sourceInfo\": \"sitio_web_universidad\",\n  \"motivation\": \"Estoy muy interesado en obtener esta beca porque me permitirá continuar mis estudios sin preocupaciones económicas y dedicarme completamente a mi formación académica. Mi promedio académico refleja mi compromiso con la excelencia, y esta beca sería fundamental para completar mi carrera y contribuir al desarrollo tecnológico del país.\",\n  \"files\": [\n    {\n      \"kind\": \"academic_docs\",\n      \"filename\": \"cv-1704067200000-a1b2c3d4.pdf\",\n      \"mimetype\": \"application/pdf\",\n      \"sizeBytes\": 1024000,\n      \"urlOrPath\": \"/uploads/cv-1704067200000-a1b2c3d4.pdf\"\n    },\n    {\n      \"kind\": \"academic_docs\",\n      \"filename\": \"certificado-notas-1704067201000-e5f6g7h8.pdf\",\n      \"mimetype\": \"application/pdf\",\n      \"sizeBytes\": 512000,\n      \"urlOrPath\": \"/uploads/certificado-notas-1704067201000-e5f6g7h8.pdf\"\n    }\n  ],\n  \"acceptRequirements\": \"true\",\n  \"commitToProcess\": \"true\",\n  \"acceptPrivacy\": \"true\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/applications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "applications"]
+            },
+            "description": "Crear nueva postulación a una beca. Primero subir archivos con /uploads, luego usar las referencias aquí."
+          }
+        }
+      ],
+      "description": "Endpoints de postulaciones"
+    },
+    {
+      "name": "📎 Uploads",
+      "item": [
+        {
+          "name": "Upload Academic Files",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": [],
+                  "description": "Archivo CV (PDF)"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": [],
+                  "description": "Certificado de notas (PDF)"
+                },
+                {
+                  "key": "kind",
+                  "value": "academic_docs",
+                  "type": "text",
+                  "description": "Tipo de archivo"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/uploads",
+              "host": ["{{base_url}}"],
+              "path": ["api", "uploads"]
+            },
+            "description": "Subir archivos académicos (CV, certificados, transcripts). Selecciona los archivos en los campos 'files'."
+          }
+        },
+        {
+          "name": "Upload Personal Files",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": [],
+                  "description": "Foto cédula (JPG)"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": [],
+                  "description": "Foto personal (JPG)"
+                },
+                {
+                  "key": "kind",
+                  "value": "personal_docs",
+                  "type": "text",
+                  "description": "Tipo de archivo"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/uploads",
+              "host": ["{{base_url}}"],
+              "path": ["api", "uploads"]
+            },
+            "description": "Subir documentos personales (cédula, foto). Selecciona los archivos en los campos 'files'."
+          }
+        },
+        {
+          "name": "Upload Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/uploads/info",
+              "host": ["{{base_url}}"],
+              "path": ["api", "uploads", "info"]
+            },
+            "description": "Obtener información de configuración de uploads (tipos permitidos, límites, etc.)"
+          }
+        }
+      ],
+      "description": "Endpoints de subida de archivos"
+    },
+    {
+      "name": "👨‍💼 Admin - Scholarships",
+      "item": [
+        {
+          "name": "List Admin Scholarships",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/scholarships?page=1&limit=20&status=draft&q=excelencia&sort=newest",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "scholarships"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Página",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Límite por página",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "draft",
+                  "description": "Estado (draft, published, closed, archived)",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "excelencia",
+                  "description": "Búsqueda por texto",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "newest",
+                  "description": "Ordenamiento (newest, oldest, title, status)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Listar todas las becas para admin (incluye draft y archived). Requiere autenticación admin."
+          }
+        },
+        {
+          "name": "Create Scholarship",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Beca de Excelencia Académica 2024\",\n  \"description\": \"Programa de becas dirigido a estudiantes destacados con alto rendimiento académico que requieren apoyo financiero para continuar sus estudios superiores. Esta beca busca promover la excelencia académica y el desarrollo del talento joven en Colombia.\",\n  \"benefits\": \"Matrícula completa por semestre, auxilio mensual de $800.000, subsidio de materiales académicos, acceso a programas de mentoría y desarrollo profesional.\",\n  \"vacancies\": 25,\n  \"modality\": \"presencial\",\n  \"requirements\": [\n    \"Promedio académico mínimo de 4.5 sobre 5.0\",\n    \"Estar cursando entre 3er y 8vo semestre\",\n    \"Carta de recomendación de docente\",\n    \"Ensayo motivacional de máximo 500 palabras\",\n    \"Certificado de ingresos familiares\",\n    \"Fotocopia del documento de identidad\"\n  ],\n  \"eligibleLevels\": [\"pregrado\", \"posgrado\"],\n  \"openAt\": \"2024-03-01T00:00:00.000Z\",\n  \"closeAt\": \"2024-05-31T23:59:59.000Z\",\n  \"contactEmail\": \"becas@universidad.edu.co\",\n  \"status\": \"draft\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/scholarships",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "scholarships"]
+            },
+            "description": "Crear nueva beca. Requiere autenticación admin. Se crea en estado 'draft' por defecto."
+          }
+        },
+        {
+          "name": "Update Scholarship",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Beca de Excelencia Académica 2024 - ACTUALIZADA\",\n  \"vacancies\": 30,\n  \"status\": \"published\",\n  \"closeAt\": \"2024-06-30T23:59:59.000Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/scholarships/64f8a1234567890abcdef123",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "scholarships", "64f8a1234567890abcdef123"]
+            },
+            "description": "Actualizar beca existente (edición parcial). Cambiar el ID en la URL por el ID real de la beca."
+          }
+        }
+      ],
+      "description": "Endpoints admin de gestión de becas"
+    },
+    {
+      "name": "👨‍💼 Admin - Applications",
+      "item": [
+        {
+          "name": "List Applications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/applications?page=1&limit=20&status=submitted&scholarshipId=64f8a1234567890abcdef123&q=juan&sort=newest",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "applications"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Página",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Límite por página",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "submitted",
+                  "description": "Estado de postulación",
+                  "disabled": true
+                },
+                {
+                  "key": "scholarshipId",
+                  "value": "64f8a1234567890abcdef123",
+                  "description": "ID de beca específica",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "juan",
+                  "description": "Búsqueda por nombre/email",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "newest",
+                  "description": "Ordenamiento (newest, oldest, status, name)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Listar postulaciones con filtros. Requiere autenticación admin. Habilita los filtros que necesites."
+          }
+        },
+        {
+          "name": "Get Application Detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/applications/64f8b9876543210fedcba987",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "applications", "64f8b9876543210fedcba987"]
+            },
+            "description": "Obtener detalle completo de una postulación. Cambiar el ID por el ID real de la postulación."
+          }
+        },
+        {
+          "name": "Set Application Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"pre_evaluation\",\n  \"comment\": \"Postulación recibida correctamente. Cumple con los requisitos básicos y pasa a evaluación preliminar. Se revisarán documentos académicos y se verificará la información proporcionada.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/applications/64f8b9876543210fedcba987/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "applications", "64f8b9876543210fedcba987", "status"]
+            },
+            "description": "Cambiar estado de postulación con comentario opcional. Estados válidos: submitted, pre_evaluation, eligible, not_eligible, invited_exam, passed_exam, failed_exam, interview, selected, waitlist, rejected, awarded."
+          }
+        },
+        {
+          "name": "Export Applications CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/exports/applications.csv?scholarshipId=64f8a1234567890abcdef123&status=submitted",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "exports", "applications.csv"],
+              "query": [
+                {
+                  "key": "scholarshipId",
+                  "value": "64f8a1234567890abcdef123",
+                  "description": "Filtrar por beca específica",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "submitted",
+                  "description": "Filtrar por estado",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Exportar postulaciones a CSV. Habilita los filtros que necesites. El archivo se descarga automáticamente."
+          }
+        }
+      ],
+      "description": "Endpoints admin de gestión de postulaciones"
+    },
+    {
+      "name": "🏥 Health & System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Verificar estado del sistema, base de datos y métricas de memoria."
+          }
+        },
+        {
+          "name": "API Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Información básica de la API (versión, estado, timestamp)."
+          }
+        }
+      ],
+      "description": "Endpoints de salud del sistema y información general"
+    }
+  ]
+}

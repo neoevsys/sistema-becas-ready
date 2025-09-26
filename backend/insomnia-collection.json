@@ -1,0 +1,164 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-01-01T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "req_root",
+      "parentId": "wrk_becas",
+      "modified": 1640995200000,
+      "created": 1640995200000,
+      "url": "{{ _.baseUrl }}",
+      "name": "Info de la API",
+      "description": "Obtiene información básica de la API",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1640995200000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_health",
+      "parentId": "fld_system",
+      "modified": 1640995200000,
+      "created": 1640995200000,
+      "url": "{{ _.baseUrl }}/health",
+      "name": "Health Check",
+      "description": "Verifica el estado del sistema y la base de datos",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1640995200000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_system",
+      "parentId": "wrk_becas",
+      "modified": 1640995200000,
+      "created": 1640995200000,
+      "name": "Sistema",
+      "description": "Endpoints del sistema",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1640995200000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_auth",
+      "parentId": "wrk_becas",
+      "modified": 1640995200000,
+      "created": 1640995200000,
+      "name": "Autenticación",
+      "description": "Endpoints de autenticación y autorización",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1640995100000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_users",
+      "parentId": "wrk_becas",
+      "modified": 1640995200000,
+      "created": 1640995200000,
+      "name": "Usuarios",
+      "description": "CRUD de usuarios",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1640995000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_scholarships",
+      "parentId": "wrk_becas",
+      "modified": 1640995200000,
+      "created": 1640995200000,
+      "name": "Becas",
+      "description": "CRUD de becas",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1640994900000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_becas",
+      "parentId": null,
+      "modified": 1640995200000,
+      "created": 1640995200000,
+      "name": "Sistema de Becas API",
+      "description": "Colección de endpoints para el sistema de becas",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "wrk_becas",
+      "modified": 1640995200000,
+      "created": 1640995200000,
+      "name": "Base Environment",
+      "data": {
+        "baseUrl": "http://localhost:5000",
+        "authToken": ""
+      },
+      "dataPropertyOrder": {
+        "&": ["baseUrl", "authToken"]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1640995200000,
+      "_type": "environment"
+    },
+    {
+      "_id": "env_production",
+      "parentId": "env_base",
+      "modified": 1640995200000,
+      "created": 1640995200000,
+      "name": "Producción",
+      "data": {
+        "baseUrl": "https://api.becas.com"
+      },
+      "dataPropertyOrder": {
+        "&": ["baseUrl"]
+      },
+      "color": "#ff6b6b",
+      "isPrivate": false,
+      "metaSortKey": 1640995200000,
+      "_type": "environment"
+    },
+    {
+      "_id": "env_docker",
+      "parentId": "env_base",
+      "modified": 1640995200000,
+      "created": 1640995200000,
+      "name": "Docker Local",
+      "data": {
+        "baseUrl": "http://localhost:5000"
+      },
+      "dataPropertyOrder": {
+        "&": ["baseUrl"]
+      },
+      "color": "#4dabf7",
+      "isPrivate": false,
+      "metaSortKey": 1640995100000,
+      "_type": "environment"
+    }
+  ]
+}
