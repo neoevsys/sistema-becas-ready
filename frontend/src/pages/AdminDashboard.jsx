@@ -23,7 +23,17 @@ const AdminDashboard = () => {
     isError
   } = useQuery({
     queryKey: ['admin-scholarships', filters],
-    queryFn: () => listAdmin(filters),
+    queryFn: () => {
+      // Filtrar parámetros vacíos
+      const cleanFilters = Object.entries(filters).reduce((acc, [key, value]) => {
+        if (value && value.trim()) {
+          acc[key] = value;
+        }
+        return acc;
+      }, {});
+      
+      return listAdmin(cleanFilters);
+    },
     staleTime: 2 * 60 * 1000,
   });
 
